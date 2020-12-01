@@ -1,4 +1,13 @@
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'root' WITH GRANT OPTION;
+
+select 'I am testing this. 4444444  ***************.............';
+
+FLUSH PRIVILEGES;
+
 CREATE DATABASE IF NOT EXISTS test;
+
+select 'I am testing this.33  ....**************.........';
 USE test;
 
 CREATE TABLE IF NOT EXISTS Category (

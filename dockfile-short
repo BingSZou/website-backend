@@ -1,0 +1,11 @@
+FROM adoptopenjdk:11-jre-hotspot as builder
+
+CMD ["mkdir", "application"]
+
+WORKDIR application/
+
+COPY target/backend-0.0.1-SNAPSHOT.jar application/app.jar
+
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+EXPOSE 8080
