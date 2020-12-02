@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot as builder
 WORKDIR application
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=./target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
@@ -12,7 +12,7 @@ COPY --from=builder application/snapshot-dependencies/ ./
 # no need now  COPY --from=builder application/resources/ ./
 COPY --from=builder application/application/ ./
 
-COPY entrypoint.sh ./entrypoint.sh
+COPY ./Deploy/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
 EXPOSE 8080

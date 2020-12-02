@@ -2,12 +2,11 @@ version: "3"
 
 services:
   openfree-sql:
-    build:
-      context: ../database
-      dockerfile: ../Deploy/Dockerfile_Db
-    container_name: openfree-sql
+    image: susanazou/bsz_tech:openfree-db-img
+    container_name: deploy-openfree-sql
     environment:
       MYSQL_DATABASE: "test"
+      MYSQL_ROOT_USERNAME: root
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: "%"
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -22,18 +21,25 @@ services:
       retries: 10
 
   openfree-service:
-    build:
-      context: ../
-      dockerfile: ./Deploy/Dockerfile
-    container_name: openfree-service
+    image: susanazou/bsz_tech:openfree-service-img
+    container_name: deploy-openfree-service
     depends_on:
       - openfree-sql
     ports:
-      - 8080:8080
+      - 8180:8080
     restart: on-failure
     #command: ["./entrypoint.sh", "openfree-sql:3306", "--", "java", "-jar", "app/app.jar"]
     command: ["./entrypoint.sh", "openfree-sql:3306", "--", "java", "org.springframework.boot.loader.JarLauncher"]
     environment:
-      DATABASE_URL: jdbc:mysql://openfree-sql:3306/test
+      DATABASE_URL: jdbc:mysql://deploy-openfree-sql:3306/test
       DATABASE_USER: root
       DATABASE_PASSWORD: root
+
+  openfree-web:
+    image: susanazou/bsz_tech:openfree-web-img
+    container_name: deploy-openfree-web
+    depends_on:
+      - openfree-service
+    ports:
+      - 3000:80
+    restart: on-failure
